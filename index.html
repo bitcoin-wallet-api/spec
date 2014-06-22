@@ -69,19 +69,25 @@
       <section>
         <h3>Common Types</h3>
         <section>
+          <h4>HexEncoded</h4>
+          <div class='idl' title='typedef DOMString HexEncoded'>
+            <a>HexEncoded</a> contains a hex-encoded binary string.
+          </div>
+        </section>
+        <section>
           <h4>EncodedTransaction</h4>
-          <div class='idl' title='typedef DOMString EncodedTransaction'>
+          <div class='idl' title='typedef HexEncoded EncodedTransaction'>
             <a>EncodedTransaction</a> contains a hex-encoded binary representation of a Bitcoin transaction.
           </div>
         </section>
         <section>
         <h4>Input</h4>
           <dl title='interface Input' class='idl'>
-            <dt>readonly attribute DOMString txid</dt>
+            <dt>readonly attribute HexEncoded txid</dt>
             <dd>Hex-encoded to-be-used transaction hash</dd>
             <dt>readonly attribute unsigned long vout</dt>
             <dd>Non-negative integer indexing an output of the to-be-used transaction</dd>
-            <dt>readonly attribute DOMString scriptPubKey</dt>
+            <dt>readonly attribute HexEncoded scriptPubKey</dt>
             <dd>Hex-encoded scriptPubKey</dd>
             <dt>readonly attribute unsigned long? amount</dt>
             <dd>Non-negative amount available in this input. Wallet MAY choose to not include it.</dd>
