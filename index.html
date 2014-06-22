@@ -88,7 +88,7 @@
             <dt>readonly attribute unsigned long vout</dt>
             <dd>Non-negative integer indexing an output of the to-be-used transaction</dd>
             <dt>readonly attribute HexEncodedBinary scriptPubKey</dt>
-            <dd>Hex-encoded scriptPubKey</dd>
+            <dd>Hex-encoded scriptPubKey of the input</dd>
             <dt>readonly attribute unsigned long? amount</dt>
             <dd>Non-negative amount available in this input. Wallet MAY choose to not include it.</dd>
             <dt>readonly attribute unsigned long? confirmations</dt>
@@ -98,7 +98,10 @@
         <section>
         <h4>Output</h4>
           <dl title='interface Output' class='idl'>
-            <dt>readonly attribute Uint8Array binary</dt>
+            <dt>readonly attribute unsigned long value</dt>
+            <dd>Non-negative amount</dd>
+            <dt>readonly attribute HexEncodedBinary scriptPubKey</dt>
+            <dd>Hex-encoded scriptPubKey</dd>
           </dl>
         </section>
       </section>
