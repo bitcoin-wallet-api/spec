@@ -44,9 +44,9 @@
       <code>
         <pre class='example highlight'>
           bitcoin.getWallet(function(w) {
-            w.authorizeAmount(1, null, 'Requesting 1 BTC for X', function(token, inputs, outputs) {
-             var tx = prepareTx(inputs, outputs);
-              w.sign(tx, token, sendTx)
+            w.authorizeTransaction(100000000, null, 'Requesting 1 BTC for X', function(auth) {
+              var tx = prepareTx(auth.inputs, auth.outputs);
+              auth.sign(tx, auth.brodcast);
             })
           })
         </pre>
@@ -69,9 +69,24 @@
       <section>
         <h3>Common Types</h3>
         <section>
+          <h4>EncodedTransaction</h4>
+          <div class='idl' title='typedef DOMString EncodedTransaction'>
+            <a>EncodedTransaction</a> contains a hex-encoded binary representation of a Bitcoin transaction.
+          </div>
+        </section>
+        <section>
         <h4>Input</h4>
           <dl title='interface Input' class='idl'>
-            <dt>readonly attribute Uint8Array binary</dt>
+            <dt>readonly attribute DOMString txid</dt>
+            <dd>Hex-encoded to-be-used transaction hash</dd>
+            <dt>readonly attribute unsigned long vout</dt>
+            <dd>Non-negative integer indexing an output of the to-be-used transaction</dd>
+            <dt>readonly attribute DOMString scriptPubKey</dt>
+            <dd>Hex-encoded scriptPubKey</dd>
+            <dt>readonly attribute unsigned long? amount</dt>
+            <dd>Non-negative amount available in this input. Wallet MAY choose to not include it.</dd>
+            <dt>readonly attribute unsigned long? confirmations</dt>
+            <dd>Number of confirmations available for this input. Wallet MAY choose to not include it.</dd>
           </dl>
         </section>
         <section>
@@ -96,10 +111,24 @@
         <h3>Wallet interface</h3>
         <dl title='interface Wallet' class='idl'>
           <dt>const integer INSUFFICIENT_FUNDS = 101</dt>
-          <dd>Error code used by authorizeAmount in FailureCallback when the wallet does not contain enough bitcoins for the requested amount</dd>
-          <dt>void authorizeAmount (int amount, int? timeout, String? description, TransactionAuthorizationCallback successCallback, optional FailureCallback failureCallback)</dt>
+          <dd>Error code used by authorizeTransaction in FailureCallback when the wallet does not contain enough bitcoins for the requested amount</dd>
+          <dt>void authorizeTransaction (int amount, DOMTimeStamp? expiry, String? description, TransactionAuthorizationCallback successCallback, optional FailureCallback failureCallback)</dt>
           <dd></dd>
-          <dt>void signTransaction (Uint8Array encodedTxn, Uint8Array token, TransactionCallback successCallback, optional FailureCallback failureCallback)</dt>
+        </dl>
+      </section>
+
+      <section>
+        <h3>TransactionAuthorization interface</h3>
+        <dl title='interface TransactionAuthorization' class='idl'>
+          <dt>readonly attribute Uint8Array token</dt>
+          <dd></dd>
+          <dt>readonly attribute Input[] input</dt>
+          <dd></dd>
+          <dt>readonly attribute Output[] output</dt>
+          <dd></dd>
+          <dt>void sign (EncodedTransaction tx, TransactionCallback successCallback, optional FailureCallback failureCallback)</dt>
+          <dd></dd>
+          <dt>void broadcast (EncodedTransaction tx, BroadcastCallback successCallback, optional FailureCallback failureCallback)</dt>
           <dd></dd>
         </dl>
       </section>
@@ -121,17 +150,21 @@
        <section>
        <h4>TransactionAuthorizationCallback</h4>
          <dl title='callback TransactionAuthorizationCallback = void' class='idl'>
-           <dt>Uint8Array token</dt>
-           <dt>Input[] input</dt>
-           <dt>Output[] output</dt>
+           <dt>TransactionAuthorization authorization</dt>
          </dl>
        </section>
        <section>
        <h4>TransactionCallback</h4>
          <dl title='callback TransactionCallback = void' class='idl'>
-           <dt>Uint8Array transaction</dt>
+           <dt>EncodedTransaction tx</dt>
          </dl>
        </section>
+      <section>
+      <h4>BroadcastCallback</h4>
+        <dl title='callback BroadcastCallback = void' class='idl'>
+          <dt>EncodedTransaction tx</dt>
+        </dl>
+      </section>
       </section>
 
 
