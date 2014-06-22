@@ -119,16 +119,6 @@
       </section>
 
       <section>
-        <h3>Wallet interface</h3>
-        <dl title='interface Wallet' class='idl'>
-          <dt>const integer INSUFFICIENT_FUNDS = 101</dt>
-          <dd>Error code used by authorizeTransaction in FailureCallback when the wallet does not contain enough bitcoins for the requested amount</dd>
-          <dt>void authorizeTransaction (int amount, DOMTimeStamp? expiry, String? description, TransactionAuthorizationCallback successCallback, optional FailureCallback failureCallback)</dt>
-          <dd></dd>
-        </dl>
-      </section>
-
-      <section>
         <h3>TransactionAuthorization interface</h3>
         <dl title='interface TransactionAuthorization' class='idl'>
           <dt>readonly attribute Uint8Array token</dt>
