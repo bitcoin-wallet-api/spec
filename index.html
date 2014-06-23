@@ -133,13 +133,17 @@
         <h3>TransactionAuthorization interface</h3>
         <dl title='interface TransactionAuthorization' class='idl'>
           <dt>readonly attribute Uint8Array token</dt>
-          <dd></dd>
+          <dd>Authorization token</dd>
           <dt>readonly attribute Input[] input</dt>
           <dd></dd>
           <dt>readonly attribute Output[] output</dt>
           <dd></dd>
           <dt>readonly attribute DOMString? description</dt>
           <dd></dd>
+          <dt>const integer INVALID_TOKEN = 201</dt>
+          <dd>Error code used by <em>sign</em> and <em>broadcast</em> in <a>FailureCallback</a> when the transaction authorization token passed is invalid.</dd>
+          <dt>const integer EXPIRED_TOKEN = 202</dt>
+          <dd>Error code used by <em>sign</em> and <em>broadcast</em> in <a>FailureCallback</a> when the transaction authorization token passed has expired.</dd>
           <dt>void sign (EncodedTransaction tx, TransactionCallback successCallback, optional FailureCallback failureCallback)</dt>
           <dd></dd>
           <dt>void broadcast (EncodedTransaction tx, BroadcastCallback successCallback, optional FailureCallback failureCallback)</dt>
