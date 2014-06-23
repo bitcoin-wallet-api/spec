@@ -145,9 +145,10 @@
           <dt>const integer EXPIRED_TOKEN = 202</dt>
           <dd>Error code used by <em>sign</em> and <em>broadcast</em> in <a>FailureCallback</a> when the transaction authorization token passed has expired.</dd>
           <dt>void sign (EncodedTransaction tx, TransactionCallback successCallback, optional FailureCallback failureCallback)</dt>
-          <dd></dd>
+          <dd>Sign the transaction. Note that the wallet MAY adjust its outputs to modify fees according to the transaction being signed.
+          API users SHOULD verify the transaction's content upon its signature if they want to ensure it is still the same transaction.</dd>
           <dt>void broadcast (EncodedTransaction tx, BroadcastCallback successCallback, optional FailureCallback failureCallback)</dt>
-          <dd></dd>
+          <dd>Broadcast the transaction.</dd>
         </dl>
       </section>
 
