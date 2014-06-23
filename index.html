@@ -124,7 +124,7 @@
            <dt>const integer AUTHORIZATION_DENIED = 101</dt>
            <dd>Error code used by <em>authorizeTransaction</em> in <a>FailureCallback</a> when the transaction authorization denied.
              The wallet MUST return this error in case of insufficient funds and MAY notify user about the reason of the authorization denial.</dd>
-           <dt>void authorizeTransaction (int amount, DOMTimeStamp? expiry, String? description, TransactionAuthorizationCallback successCallback, optional FailureCallback failureCallback)</dt>
+           <dt>void authorizeTransaction (int amount, DOMTimeStamp? expiration, String? description, TransactionAuthorizationCallback successCallback, optional FailureCallback failureCallback)</dt>
            <dd></dd>
          </dl>
      </section>
@@ -132,6 +132,8 @@
       <section>
         <h3>TransactionAuthorization interface</h3>
         <dl title='interface TransactionAuthorization' class='idl'>
+          <dt>readonly attribute DOMTimeStamp expiration</dt>
+          <dd>Authorization expiration</dd>
           <dt>readonly attribute Uint8Array token</dt>
           <dd>Authorization token</dd>
           <dt>readonly attribute Input[] input</dt>
