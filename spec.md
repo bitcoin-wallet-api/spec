@@ -50,9 +50,9 @@ This specification defines several distinct protocols:
 App developer: what API should I use?
 -------------------------------------
 
-If you develop a **web application**, you should consider two APIs: Bitcoin JS API (if it's available) and Bitcoin URL API. Bitcoin JS API provides smoother experience for user, but requires coordnation between their web browser and their wallet. Bitcoin URL may be used directly without special support from the browser. Bitcoin URL API also allows easy fallback to an intermediate wallet that can be used to fund special transactions (in case user's wallet does not support any form of Wallet API).
+If you develop a **web application**, you should consider three APIs: Bitcoin JS API (if it's available), Bitcoin HTTP API and Bitcoin URL API. Bitcoin JS API provides smoother experience for user, but requires coordnation between their web browser and their wallet. Bitcoin HTTP API is also smooth and works similarly to OAuth: user has to authenticate transaction on a separate web page (but it works only with web-based wallets). Bitcoin URL may be used directly without special support from the browser and is used for communicating with native wallet apps. Bitcoin URL API also allows easy fallback to an intermediate wallet that can be used to fund special transactions (in case user's wallet does not support any form of Wallet API).
 
-If you develop a **native application**, e.g. for iOS, consider using native Bitcoin extension API or Bitcoin URL. Same reasoning applies as to web apps. Use Bitcoin URL when native extensions are not available. You can use custom URL schemes in URL callbacks for inter-app communication.
+If you develop a **native application**, e.g. for iOS, consider using native Bitcoin extension API, Bitcoin HTTP API or Bitcoin URL. Same reasoning applies as to web apps. When native extensions are not available, use Bitcoin HTTP for web wallets and URL scheme for native apps. You can use custom URL schemes in URL callbacks for inter-app communication.
 
 
 Wallet developer: what should I implement?
