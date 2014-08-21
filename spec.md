@@ -9,7 +9,6 @@ Apps implementing custom schemes on top of Bitcoin blockchain require user to pr
 
 The goal is to avoid 3rd party apps from re-inventing secure key storage and backup. User wallet already keeps the keys, authorizes access to them and implements a backup procedure. Third party app can simply ask user to sign certain transactions and add their bitcoins in them.
 
-
 Overview
 --------
 
@@ -26,7 +25,6 @@ Use cases:
 4. App is a web page and wallet is a separate hardware device.
 5. Etc.
 
-
 Structure
 ---------
 
@@ -36,16 +34,42 @@ This specification defines several distinct protocols:
 
 1. **Core Spec** covers common binary data structures and secure protocol of exchanging them without specifying any specific programming interfaces. This protocol is the basis for all other protocols defined below.
 
-2. **Bitcoin URL Extension** defines means to communicate core data structures using standard *bitcoin:* URL scheme. This allows simple, although not very transparent, integration between websites and native apps.
+2. **Bitcoin HTTP API** defines means to communicate core data structures using HTTP requests. This is for wallets hosted on the web like Coinbase and Blockchain.info.
 
-3. **Bitcoin JS API** defines JavaScript API for web browsers that allows web pages communicating to Bitcoin wallets.
+3. **Bitcoin URL API** defines means to communicate core data structures using standard *bitcoin:* URL scheme. This allows simple, although not very transparent, integration between websites and native apps.
 
-4. **Bitcoin iOS/OSX extensions** defines a standard way to declare and access extensions provided by wallet apps on iOS and OS X (starting with iOS 8 and OS X 10.10).
+4. **Bitcoin JS API** defines JavaScript API for web browsers that allows web pages communicating to Bitcoin wallets.
 
-5. **Bitcoin Android extentions** defines a standard way to declare extensions for Android apps.
+5. **Bitcoin iOS/OSX extensions** defines a standard way to declare and access extensions provided by wallet apps on iOS and OS X (starting with iOS 8 and OS X 10.10).
 
-6. Similar native APIs for Windows and Linux.
+6. **Bitcoin Android extentions** defines a standard way to declare extensions for Android apps.
 
+7. Similar native APIs for Windows and Linux.
+
+
+App developer: what API should I use?
+-------------------------------------
+
+If you develop a **web application**, you should consider two APIs: Bitcoin JS API (if it's available) and Bitcoin URL API. Bitcoin JS API provides smoother experience for user, but requires coordnation between their web browser and their wallet. Bitcoin URL may be used directly without special support from the browser. Bitcoin URL API also allows easy fallback to an intermediate wallet that can be used to fund special transactions (in case user's wallet does not support any form of Wallet API).
+
+If you develop a **native application**, e.g. for iOS, consider using native Bitcoin extension API or Bitcoin URL. Same reasoning applies as to web apps. Use Bitcoin URL when native extensions are not available. You can use custom URL schemes in URL callbacks for inter-app communication.
+
+
+Wallet developer: what should I implement?
+------------------------
+
+If your wallet is **web-based**, consider implementing Bitcoin HTTP API. Also consider developing a *satellite native app* to ease integration with native apps. 
+
+If your wallet is a **native app**, it is recommended that you implement all three APIs: Bitcoin URL API, native extension for your platform and integrate with browsers of your platforms so they can provide JS API. If the browser on your platform already knows how to speak with native extensions, you do not need to specifically integrate with JS API.
+
+If your wallet is a **separate device**, consider implementing both JS API via browser extension and a native app with a native extension. If the browser on your supported platform already supports JS API by communicating with native extensions, you may simply develop an app with native extension API.
+
+If you are a **web browser** developer, consider these possibilities: 
+
+1. Expose JS API that talks to extensions provided by native wallet apps.
+2. Allow connecting to this API by your own in-browser extensions (so instead of redefining JS API from scratch they provide it directly for the browser). This is for wallets that are implemented as in-browser extensions or for in-browser extensions that talk to external hardware or software wallets.
+3. Expose the browser itself as a wallet via native extensions for other native apps and proxy requests to the wallets to which it is connected.
+4. As a variant of #3, identify web-based bitcoin wallets by <link> meta tag and proxy requests to them via HTTP API.
 
 
 Core Spec
