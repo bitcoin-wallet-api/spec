@@ -57,7 +57,7 @@ Bitcoin Wallet API is based on three core protocols:
 
 2. **Inputs Authorization**. This is a two-step process. App requests from Wallet an authorization to spend certain amount of coins. Wallet asks user's permission and sends back to the app a list of unsigned inputs and change outputs. App uses them to compose a complete transaction that is sent back to Wallet for signing. Wallet signs the transaction if it correctly uses all authorized inputs and outputs.
 
-3. **Key API**. App may outsource key storage to Wallet because it already implements security and safety measures such as encryption, authorization and backups. App can only access public keys specific to itself and request signatures of arbitrary data using these keys. Wallet never stores its own coins using these keys and only provides storage service to the app. 
+3. **Key API**. App may outsource key storage to Wallet because it already implements security and safety measures such as encryption, authorization and backups. App can only access public keys specific to itself and request signatures of arbitrary data using these keys. Wallet never stores its own coins using these keys and only provides storage service to the app. Three requests are supported by this API: Public key request, ECDSA signature and Diffie-Hellman multiplication.
 
 
 TODO: Define data structures:
@@ -113,12 +113,28 @@ TODO: we need to define a way for app to explain a reason for payment.
 
 3) **Key API**
 
+**Public Key request:**
+
+    bitcoin:?&req-pubkey-index=<key index>&id=<base58check compressed pubkey>&t=<timestamp>&return=<url where to return the pubkey>[&message=...]&sig=<signature>
+
+
+**Signature API:**
+
 Sometimes in case of web API or native extension API receiver may authenticate the caller using system-provided identifier. E.g. domain name (www.example.com) in JS API or bundle identifier (com.example.myapp) in iOS extensions. 
 
 In cases when secure identification is not possible, App may identify itself simply by a public key and prove itself using a one-time signature of bitcoin: request.
 
+    bitcoin:?req-sign-hash=<hex hash to sign>&i=<key index>&id=<base58check compressed pubkey>&t=<timestamp>&return=<url where to return the signature>[&message=...]&sig=<signature>
 
-    bitcoin:?req-hash=<base58check hash to sign>&req-index=<key index>&req-source=<base58check compressed pubkey>&t=<timestamp>[&message=...]&sig=<signature>
+*req-sign-hash*: hash to sign. Hash must be minimum 160 bits long and maximum 512 bits long. Only this parameter is marked "req-" to make sure incompatible wallets fail. Other parameters (i, id, t, sig) are required.
+
+*i*: index of a key to be used that is derived from a root key.
+
+*id*: pubkey identifying the app. It is used to derive the root key.
+
+*t*: UNIX timestamp of the current time. Wallet should ignore too old URLs or warn users about them. Recommended to only allow URLs within last 60 seconds and ignore any older or future ones.
+
+*return*: URL where to return the signature in Base58Check format.
 
 Wallet produces a key by mixing the root key with a given pubkey (DH) after validating that the bitcoin: request is not too old (less than a minute since receiving the request) and is properly signed by a given public key.
 
@@ -126,12 +142,25 @@ Source key is supposed to be stored in a secure location.
 
 In some contexts this API may be of a no value. E.g. if the secure storage of an identifying public key may also be used for storing actual keys that user is supposed to use within the App. But in server-client Apps where server keeps the key and client authorizes transactions, this API is useful.
 
+**Diffie-Hellman API:**
+
+    bitcoin:?req-dh=<base58check pubkey to multiply>&i=<key index>&id=<base58check compressed pubkey>&t=<timestamp>&return=<url where to return the signature>[&message=...]&sig=<signature>
+
+Instead of signing a hash, multiplies a given public key by a derived private key and returns the resulting public key.
+
+
 
 Bitcoin JS API
 --------------
 
 
 TODO: write up on JS functions, structures and callbacks for each of the APIs.
+
+Note 1: Wallet must return a list of signatures, but JS API should put them automatically in user's transaction. So the app may simply trust the transaction but not trust the wallet.
+
+Note 2: Key API should support 3 functions: pubkey request for a given index, ECDSA signature for a given hash and DH pubkey for a given pubkey.
+
+
 
 
 
