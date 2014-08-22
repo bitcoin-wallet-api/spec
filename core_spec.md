@@ -9,8 +9,8 @@ Apps implementing custom schemes on top of Bitcoin blockchain require user to pr
 
 The goal is to avoid 3rd party apps from re-inventing secure key storage and backup. User wallet already keeps the keys, authorizes access to them and implements a backup strategy. Third party app can simply ask user to sign certain transactions and add their bitcoins in them. The specification is designed to cover many use cases with extremely easy to use APIs.
 
-Specifications
---------------
+Setup
+-----
 
 *App*: an application that implements some sort of custom transactions. App could be a web page or a native application.
 
@@ -25,6 +25,10 @@ Various combinations are therefore possible:
 5. Wallet is a hardware device accompanied with a proxy client or browser extension. 
 
 To allow smooth integration between apps and wallets in all these scenarios, we propose a single core specification and several platform-specific APIs.
+
+
+Protocols and APIs
+------------------
 
 1. **Core Specification** covers common binary data structures and secure protocol of exchanging them. It does not specify any specific programming interface for any platform or language. This protocol is the basis for all concrete APIs listed below.
 
