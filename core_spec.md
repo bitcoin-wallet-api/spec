@@ -34,17 +34,17 @@ This specification defines the following:
 
 1. **Core Specification** covers common binary data structures and secure protocol of exchanging them without specifying any specific programming interfaces. This protocol is the basis for all the APIs listed below.
 
-2. **[Bitcoin HTTP API](http_api_spec.md)** is an implementation of Core Spec for HTTP services. This is for web wallets like Coinbase and Blockchain.info.
+2. **[Bitcoin Wallet HTTP API](http_api_spec.md)** is an implementation of Core Spec for HTTP services. This is for web wallets like Coinbase and Blockchain.info.
 
 3. **[Bitcoin URL API](url_spec.md)** is an implementation of Core Spec using *bitcoin:* URL scheme. It allows simple access to wallets for websites and native apps.
 
-4. **[Bitcoin JavaScript API](js_api_spec.md)** is an implementation of Core Spec with JavaScript API for web browsers. It allows web pages accessing Bitcoin wallets directly.
+4. **[Bitcoin Wallet JavaScript API](js_api_spec.md)** is an implementation of Core Spec with JavaScript API for web browsers. It allows web pages accessing Bitcoin wallets directly.
 
-5. **[Bitcoin iOS/OSX extensions](ios_osx_api_spec.md)** is an implementation of Core Spec with system-provided extensions API. Wallet apps may expose such extensions to allow other native apps to access them.
+5. **[Bitcoin Wallet iOS/OSX API](ios_osx_api_spec.md)** is an implementation of Core Spec with system-provided extensions API. Wallet apps may expose such extensions to allow other native apps to access them.
 
-6. **[Bitcoin Android extensions](android_api_spec.md)** defines a standard way to declare extensions for Android apps.
+6. **[Bitcoin Wallet Android API](android_api_spec.md)** defines a standard way to declare extensions for Android apps.
 
-7. **[Bitcoin Windows extensions](windows_api_spec.md)** defines a standard way to declare extensions for Windows 8 apps.
+7. **[Bitcoin Wallet Windows API](windows_api_spec.md)** defines a standard way to declare extensions for Windows 8 apps.
 
 
 App developer: what API should I use?
