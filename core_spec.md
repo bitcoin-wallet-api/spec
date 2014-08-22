@@ -65,8 +65,9 @@ If your wallet is a **separate device**, consider implementing both [JS API](js_
 
 If you develop a web browser, consider these possibilities: 
 
-1. Implement [JavaScript API](js_api_spec.md) that talks to extensions provided by native wallet apps.
-2. Allow your own in-browser extensions to connect to JS API (so instead of overriding the entire JS API they can act as proxies to it). This is for wallets that are implemented as in-browser extensions or for in-browser extensions that talk to external hardware or software wallets.
+1\. Implement [JavaScript API](js_api_spec.md) that talks to extensions provided by native wallet apps.
+
+2\. Allow your own in-browser extensions to connect to JS API (so instead of overriding the entire JS API they can act as proxies to it). This is for wallets that are implemented as in-browser extensions or for in-browser extensions that talk to external hardware or software wallets.
 
 
 Core Protocols
