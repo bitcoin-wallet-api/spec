@@ -75,7 +75,7 @@ If you are a **web browser** developer, consider these possibilities:
 Core Spec
 ---------
 
-Bitcoin Wallet API is based on three core protocols:
+Bitcoin Wallet API is based on five protocols:
 
 1. **Pay-to-Transaction**. App sends an incomplete transaction to Wallet and asks to add a certain amount of coins in it. Wallet asks user's permission and adds signed inputs to the transaction.
 
@@ -86,6 +86,8 @@ Bitcoin Wallet API is based on three core protocols:
 4. **Signature API**. Using the public key exposed in the previous API, App may request arbitrary data to be signed by the given key.
 
 5. **Diffie-Hellman API**. Using the public key exposed in the previous API, App may ask Wallet to multiply an arbitrary public key by a private key allocated for this App.
+
+Wallet developers may implement all of these or only a subset using one of the concrete APIs listed above. 
 
 
 Pay-to-Transaction Specification
