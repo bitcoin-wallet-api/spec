@@ -1,38 +1,32 @@
 
-Bitcoin Wallet API Spec
-=======================
+Bitcoin Wallet API Specification
+================================
 
 Motivation
 ----------
 
-Apps implementing custom schemes on top of Bitcoin blockchain require user to provide bitcoins and signatures in custom transactions. Unified API enables users to keep their bitcoins in a convenient place (personal wallet) while safely allocating desired amounts to custom transactions.
+Apps implementing custom schemes on top of Bitcoin blockchain require user to provide bitcoins and signatures in custom transactions. Unified API enables users to keep their bitcoins in a convenient personal wallet while safely allocating desired amounts to custom transactions.
 
-The goal is to avoid 3rd party apps from re-inventing secure key storage and backup. User wallet already keeps the keys, authorizes access to them and implements a backup procedure. Third party app can simply ask user to sign certain transactions and add their bitcoins in them.
+The goal is to avoid 3rd party apps from re-inventing secure key storage and backup. User wallet already keeps the keys, authorizes access to them and implements a backup strategy. Third party app can simply ask user to sign certain transactions and add their bitcoins in them. The specification is designed to cover many use cases with extremely easy to use APIs.
 
-Overview
---------
+Specifications
+--------------
 
-Legend:
+*App*: an application that implements some sort of custom transactions. App could be a web page or a native application.
 
-- *App*: application that implements some sort of custom transactions.
-- *Wallet*: an application or device that is trusted by user and stores his private keys.
+*Wallet*: an application or device that is trusted by user and stores his private keys. Wallet could be web-based (accessible via HTTP), a native app, a hardware device or a browser extension.
 
-Some use cases:
+Various combinations are therefore possible:
 
-1. App is a web page and wallet is another web service (e.g. Blockchain.info, Coinbase).
-2. App is a web page and the wallet is a native app.
-3. App is a native app and wallet is a native app.
-4. App is a web page and wallet is a separate hardware device.
-5. Etc.
+1. App is a web page and Wallet is another web service (e.g. Blockchain.info, Coinbase).
+2. App is a web page and the Wallet is a native application. 
+3. App is a native application and the Wallet is a web service.
+4. Both App and Wallet are native applications.
+5. Wallet is a hardware device accompanied with a proxy client or browser extension. 
 
-Structure
----------
+To allow smooth integration between apps and wallets in all these scenarios, we propose a single core specification and several platform-specific APIs.
 
-Bitcoin apps and wallets exist on a variety of platforms: web sites, native apps, browser extensions, hardware devices. All of these should have means to communicate with each other. 
-
-This specification defines the following:
-
-1. **Core Specification** covers common binary data structures and secure protocol of exchanging them without specifying any specific programming interfaces. This protocol is the basis for all the APIs listed below.
+1. **Core Specification** covers common binary data structures and secure protocol of exchanging them. It does not specify any specific programming interface for any platform or language. This protocol is the basis for all concrete APIs listed below.
 
 2. **[Bitcoin Wallet HTTP API](http_api_spec.md)** is an implementation of Core Spec for HTTP services. This is for web wallets like Coinbase and Blockchain.info.
 
@@ -47,14 +41,14 @@ This specification defines the following:
 7. **[Bitcoin Wallet Windows API](windows_api_spec.md)** defines a standard way to declare extensions for Windows 8 apps.
 
 
-### App developer: what API should I use?
+#### I am developing a smart contract scheme, what API should I use?
 
 If you develop a **web application**, you should consider three APIs: [Bitcoin JS API](js_api_spec.md) (when available), [Bitcoin HTTP API](http_api_spec.md) and [Bitcoin URL](url_spec.md). Bitcoin JS API provides smoother experience for user, but requires coordination between their web browser and their wallet. Bitcoin HTTP API is also smooth and works similarly to OAuth: user has to authenticate transaction on a separate web page (but it works only with web-based wallets). Bitcoin URL may be used directly without special support from the browser and is used for communicating with native wallet apps. Bitcoin URL API also allows easy fallback to an intermediate wallet that can be used to fund special transactions (in case user's wallet does not support any form of Wallet API).
 
 If you develop a **native application**, e.g. for iOS, consider using native [Bitcoin extension API](ios_osx_api_spec.md), [Bitcoin HTTP API](http_api_spec.md) or [Bitcoin URL](js_api_spec.md). Same reasoning applies as to web apps. When native extensions are not available, use Bitcoin HTTP for web wallets and URL scheme for native apps. You can use custom URL schemes in URL callbacks for inter-app communication.
 
 
-### Wallet developer: what should I implement?
+#### I am a wallet developer, which API should I implement?
 
 If your wallet is **web-based**, consider implementing [Bitcoin HTTP API](http_api_spec.md). Also consider developing a *satellite native app* to ease integration with native apps. 
 
@@ -62,12 +56,13 @@ If your wallet is a **native app**, it is recommended that you implement these t
 
 If your wallet is a **separate device**, consider implementing both [JS API](js_api_spec.md) via browser extension and a native app with a native extension. If the browser on your supported platform already supports JS API by communicating with native extensions, you may simply develop an app with native extension API.
 
-If you are a **web browser** developer, consider these possibilities: 
 
-1. Expose [JS API](js_api_spec.md) that talks to extensions provided by native wallet apps.
-2. Allow connecting to this API by your own in-browser extensions (so instead of redefining JS API from scratch they provide it directly for the browser). This is for wallets that are implemented as in-browser extensions or for in-browser extensions that talk to external hardware or software wallets.
-3. Expose the browser itself as a wallet via native extensions for other native apps and proxy requests to the wallets to which it is connected.
-4. As a variant of #3, identify web-based bitcoin wallets by <link> meta tag and proxy requests to them via HTTP API.
+#### I am a developer of a web browser, which API should I implement?
+
+If you develop a web browser, consider these possibilities: 
+
+1. Implement [JavaScript API](js_api_spec.md) that talks to extensions provided by native wallet apps.
+2. Allow your own in-browser extensions to connect to JS API (so instead of overriding the entire JS API they can act as proxies to it). This is for wallets that are implemented as in-browser extensions or for in-browser extensions that talk to external hardware or software wallets.
 
 
 Core Spec Protocols
@@ -141,13 +136,13 @@ Proxying
 
 If the implementation of this spec acts as a bridge between the app and the wallet (e.g. a web browser or a native client to a hardware wallet), then it may proxy requests directly to the recipient without asking user's permission too often. 
 
-### JS API proxying by web browser
+#### JS API proxying by web browser
 
 Browser may ask user to select a wallet of his choice or detect such wallet automatically (using bitcoin: scheme for native apps). 
 
 Browser may ask user to authorize certain website's access to the wallet and remember that choice. This is to limit spam attempts to connect to the wallets and possibly exploit vulnerabilities in them. Once allowed, browser will never ask user's permission and direct all request to the wallet. It's now wallet's job to get user's permission to give app access to the wallet.
 
-### Native app proxy to hardware wallet
+#### Native app proxy to hardware wallet
 
 Similarly to web browser, native app may ask a permission to access hardware wallet just once. Then authorization happens on hardware wallet directly while native app simply transfers data to and from the requesting app.
 
@@ -174,4 +169,10 @@ Kinds of errors:
 4. No confirmed outputs available yet. Wallet may tell the user that his coins are not "mature" enough. App sees generic "failure" error.
 
 
+Examples
+--------
+
+Here are some examples of interesting schemes that can use wallet API to allow user direct participation without intermediate deposits.
+
+#### 1. 
 
