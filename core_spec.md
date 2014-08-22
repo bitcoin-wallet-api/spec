@@ -12,11 +12,11 @@ The goal is to avoid 3rd party apps from re-inventing secure key storage and bac
 Setup
 -----
 
-*App*: an application that implements some sort of custom transactions. App could be a web page or a native application.
+**App** is an application that implements some sort of custom transactions. App could be a web page or a native application.
 
-*Wallet*: an application or device that is trusted by user and stores his private keys. Wallet could be web-based (accessible via HTTP), a native app, a hardware device or a browser extension.
+**Wallet** is an application or device that is trusted by user and stores his private keys. Wallet could be web-based (accessible via HTTP), a native app, a hardware device or a browser extension.
 
-Various combinations are therefore possible:
+Various combinations are possible:
 
 1. App is a web page and Wallet is another web service (e.g. Blockchain.info, Coinbase).
 2. App is a web page and the Wallet is a native application. 
