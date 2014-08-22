@@ -17,7 +17,7 @@ Legend:
 - *App*: application that implements some sort of custom transactions.
 - *Wallet*: an application or device that is trusted by user and stores his private keys.
 
-Use cases:
+Some use cases:
 
 1. App is a web page and wallet is another web service (e.g. Blockchain.info, Coinbase).
 2. App is a web page and the wallet is a native app.
@@ -47,26 +47,24 @@ This specification defines the following:
 7. **[Bitcoin Wallet Windows API](windows_api_spec.md)** defines a standard way to declare extensions for Windows 8 apps.
 
 
-App developer: what API should I use?
--------------------------------------
+### App developer: what API should I use?
 
-If you develop a **web application**, you should consider three APIs: Bitcoin JS API (when available), Bitcoin HTTP API and Bitcoin URL API. Bitcoin JS API provides smoother experience for user, but requires coordination between their web browser and their wallet. Bitcoin HTTP API is also smooth and works similarly to OAuth: user has to authenticate transaction on a separate web page (but it works only with web-based wallets). Bitcoin URL may be used directly without special support from the browser and is used for communicating with native wallet apps. Bitcoin URL API also allows easy fallback to an intermediate wallet that can be used to fund special transactions (in case user's wallet does not support any form of Wallet API).
+If you develop a **web application**, you should consider three APIs: [Bitcoin JS API](js_api_spec.md) (when available), [Bitcoin HTTP API](http_api_spec.md) and [Bitcoin URL](url_spec.md). Bitcoin JS API provides smoother experience for user, but requires coordination between their web browser and their wallet. Bitcoin HTTP API is also smooth and works similarly to OAuth: user has to authenticate transaction on a separate web page (but it works only with web-based wallets). Bitcoin URL may be used directly without special support from the browser and is used for communicating with native wallet apps. Bitcoin URL API also allows easy fallback to an intermediate wallet that can be used to fund special transactions (in case user's wallet does not support any form of Wallet API).
 
-If you develop a **native application**, e.g. for iOS, consider using native Bitcoin extension API, Bitcoin HTTP API or Bitcoin URL. Same reasoning applies as to web apps. When native extensions are not available, use Bitcoin HTTP for web wallets and URL scheme for native apps. You can use custom URL schemes in URL callbacks for inter-app communication.
+If you develop a **native application**, e.g. for iOS, consider using native [Bitcoin extension API](ios_osx_api_spec.md), [Bitcoin HTTP API](http_api_spec.md) or [Bitcoin URL](js_api_spec.md). Same reasoning applies as to web apps. When native extensions are not available, use Bitcoin HTTP for web wallets and URL scheme for native apps. You can use custom URL schemes in URL callbacks for inter-app communication.
 
 
-Wallet developer: what should I implement?
-------------------------------------------
+### Wallet developer: what should I implement?
 
-If your wallet is **web-based**, consider implementing Bitcoin HTTP API. Also consider developing a *satellite native app* to ease integration with native apps. 
+If your wallet is **web-based**, consider implementing [Bitcoin HTTP API](http_api_spec.md). Also consider developing a *satellite native app* to ease integration with native apps. 
 
-If your wallet is a **native app**, it is recommended that you implement all three APIs: Bitcoin URL API, native extension for your platform and integrate with browsers of your platforms so they can provide JS API. If the browser on your platform already knows how to speak with native extensions, you do not need to specifically integrate with JS API.
+If your wallet is a **native app**, it is recommended that you implement these three APIs: [Bitcoin URL](url_spec.md), native extension for your platform and integrate with browsers of your platforms so they can provide [JS API](js_api_spec.md). If the browser on your platform already knows how to speak with native extensions, you do not need to specifically integrate with JS API.
 
-If your wallet is a **separate device**, consider implementing both JS API via browser extension and a native app with a native extension. If the browser on your supported platform already supports JS API by communicating with native extensions, you may simply develop an app with native extension API.
+If your wallet is a **separate device**, consider implementing both [JS API](js_api_spec.md) via browser extension and a native app with a native extension. If the browser on your supported platform already supports JS API by communicating with native extensions, you may simply develop an app with native extension API.
 
 If you are a **web browser** developer, consider these possibilities: 
 
-1. Expose JS API that talks to extensions provided by native wallet apps.
+1. Expose [JS API](js_api_spec.md) that talks to extensions provided by native wallet apps.
 2. Allow connecting to this API by your own in-browser extensions (so instead of redefining JS API from scratch they provide it directly for the browser). This is for wallets that are implemented as in-browser extensions or for in-browser extensions that talk to external hardware or software wallets.
 3. Expose the browser itself as a wallet via native extensions for other native apps and proxy requests to the wallets to which it is connected.
 4. As a variant of #3, identify web-based bitcoin wallets by <link> meta tag and proxy requests to them via HTTP API.
@@ -94,7 +92,7 @@ Wallet developers may implement all of these or only a subset using one of the c
 
 One request: app sends an incomplete transaction and asks wallet to add inputs and outputs and sign inputs. Wallet returns inputs, outputs and signatures.
 
-Signatures may be done with ANYONECANPAY flag.
+Signatures may be done with hashtype ALL, SINGLE and ANYONECANPAY flags. Hashtype NONE is not supported until we find a good use case for them and figure how to deal with change outputs.
 
 
 ### 2. Inputs Authorization Protocol
@@ -104,7 +102,9 @@ Two requests:
 1. Send desired amount and a message, receive inputs and outputs. 
 2. Send complete transaction. Wallet signs the inputs if all inputs and outputs are in place and returns signatures.
 
-App is free to supply incomplete transaction and ask wallet to sign with ANYONECANPAY flag.
+App is free to supply incomplete transaction and ask wallet to sign with ANYONECANPAY or SINGLE hashtype flags.
+
+Signatures may be done with hashtype ALL, SINGLE and ANYONECANPAY flags. Hashtype NONE is not supported until we find a good use case for them and figure how to deal with change outputs.
 
 TODO: specify the timeout for authorization.
 
@@ -119,15 +119,21 @@ Public key is linked to identity of the requestor. Different APIs do it differen
 
 Public key is indexed by BIP32 non-hardened derivation index. This is to simplify key management for the wallets so they do not need to store any app-specific data at all.
 
+Public keys must be presented in compact format (32 bytes).
+
 
 ### 4. Signature Protocol
 
-Standard ECDSA signature. Maybe require it to be deterministic according to RFC6979?
+Standard ECDSA signature and CompactSignature. 
+
+Require signature to be canonical (lower S, DER encoding).
+
+Maybe require it to be deterministic according to RFC6979?
 
 
 ### 5. Diffie-Hellman Protocol
 
-Wallet should check if the public key is correct and sign.
+Wallet should check if the given public key is correct and multiply it with app's private key. Returns a compact public key as a result of multiplication.
 
 
 Proxying
