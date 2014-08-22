@@ -30,17 +30,17 @@ Structure
 
 Bitcoin apps and wallets exist on a variety of platforms: web sites, native apps, browser extensions, hardware devices. All of these should have means to communicate with each other. 
 
-This specification defines several distinct protocols:
+This specification defines the following:
 
-1. **Core Spec** covers common binary data structures and secure protocol of exchanging them without specifying any specific programming interfaces. This protocol is the basis for all other protocols defined below.
+1. **Core Specification** covers common binary data structures and secure protocol of exchanging them without specifying any specific programming interfaces. This protocol is the basis for all the APIs listed below.
 
-2. **[Bitcoin HTTP API](http_api_spec.md)** defines means to communicate core data structures using HTTP requests. This is for wallets hosted on the web like Coinbase and Blockchain.info.
+2. **[Bitcoin HTTP API](http_api_spec.md)** is an implementation of Core Spec for HTTP services. This is for web wallets like Coinbase and Blockchain.info.
 
-3. **[Bitcoin URL API](url_spec.md)** defines means to communicate core data structures using standard *bitcoin:* URL scheme. This allows simple, although not very transparent, integration between websites and native apps.
+3. **[Bitcoin URL API](url_spec.md)** is an implementation of Core Spec using *bitcoin:* URL scheme. It allows simple access to wallets for websites and native apps.
 
-4. **[Bitcoin JS API](js_api_spec.md)** defines JavaScript API for web browsers that allows web pages communicating to Bitcoin wallets.
+4. **[Bitcoin JavaScript API](js_api_spec.md)** is an implementation of Core Spec with JavaScript API for web browsers. It allows web pages accessing Bitcoin wallets directly.
 
-5. **[Bitcoin iOS/OSX extensions](ios_osx_api_spec.md)** defines a standard way to declare and access extensions provided by wallet apps on iOS and OS X (starting with iOS 8 and OS X 10.10).
+5. **[Bitcoin iOS/OSX extensions](ios_osx_api_spec.md)** is an implementation of Core Spec with system-provided extensions API. Wallet apps may expose such extensions to allow other native apps to access them.
 
 6. **[Bitcoin Android extentions](android_api_spec.md)** defines a standard way to declare extensions for Android apps.
 
