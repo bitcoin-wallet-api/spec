@@ -93,6 +93,10 @@ One request: app sends an incomplete transaction and asks wallet to add inputs a
 
 Signatures may be done with hashtype ALL, SINGLE and ANYONECANPAY flags. Hashtype NONE is not supported until we find a good use case for them and figure how to deal with change outputs.
 
+TODO: how to specify the fee. Should it be explicit, or only per inputs? Wallet may have many inputs and must pay for them. Also it should not be obliged to figure the input amounts to see how many fees are left. 
+
+It's easier if the app mandates the fees (user will see authorized amount as amount + fee) or leaves it up to wallet that provides the fee only in proportion to size of its own inputs / outputs (in such case wallet may or may not show the fee as a spendable amount, just like it does with regular payments).
+
 
 ### 2. Inputs Authorization Protocol
 
@@ -178,5 +182,19 @@ Examples
 
 Here are some examples of interesting schemes that can use wallet API to allow user direct participation without intermediate deposits.
 
-#### 1. 
+#### 1. Two party escrow
+
+App (first party) prepares a transaction with 1 btc on the input and 2 btc on the 2-of-2 multisignature output. It then uses "pay-to-transaction" API to ask wallet to add another 1 btc input to the transaction. Wallet provides one or more inputs with total amount 1.2341 btc and one change output with 0.234 btc (0.0001 btc waived as a mining fee). Wallet appends its inputs and change output to the transaction and signs the inputs. It then returns signed inputs and output to the app (or broadcasts the transaction right away if API says so).
+
+
+#### 2. Multiparty escrow
+
+App is an intermediary between multiple people willing to enter in a multisig contract (for simplicity, lets say 2-of-3 scheme). Alice and Bob are supposed to contribute 1 btc each. Third party Carl acts as an arbitrator. App prepares a transaction with two outputs: one multisig with 1.99 btc and one output with Carl's address and 0.01 btc as his fee. App then uses 2-step Inputs Authorization API to gather inputs and change outputs for a total amount of 2 btc. Wallets of both parties ask permission of their owners and prepare some inputs and change outputs as in previous example. Inputs are not signed yet. Each wallet attaches a unique authorization token to the inputs and output. App receives inputs and outputs from each wallet and completes the transaction. Then it sends the complete transaction to each wallet to sign their inputs. Each wallet checks that the inputs/outputs were recently authorized and all of them are correctly present in the transaction. Each wallet signs its inputs and returns signatures back to the app. App waits for all wallets to provide signatures, adds them in a pending transaction and releases it.
+
+In both examples App may use Public Key API and Signature API to get public keys for multisignature script and when redeeming it ask the Wallet to sign a target transaction. Since these public keys are outside the scope of Wallet's funds, Wallet allows signing arbitrary hashes asked by the App. The app thus completely controls signing process, but does not need to store sensitive private keys anywhere and worry about backup. Wallet provides secure and safe storage for keys, but does not concern itself with how they are used. It only guarantees the app that the keys are isolated from the user's funds and other applications.
+
+
+
+
+
 
