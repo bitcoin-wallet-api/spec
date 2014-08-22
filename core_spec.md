@@ -133,6 +133,28 @@ Diffie-Hellman Specification
 Wallet should check if the public key is correct and sign.
 
 
+Proxying
+--------
+
+If the implementation of this spec acts as a bridge between the app and the wallet (e.g. a web browser or a native client to a hardware wallet), then it may proxy requests directly to the recipient without asking user's permission too often. 
+
+### JS API proxying by web browser
+
+Browser may ask user to select a wallet of his choice or detect such wallet automatically (using bitcoin: scheme for native apps). 
+
+Browser may ask user to authorize certain website's access to the wallet and remember that choice. This is to limit spam attempts to connect to the wallets and possibly exploit vulnerabilities in them. Once allowed, browser will never ask user's permission and direct all request to the wallet. It's now wallet's job to get user's permission to give app access to the wallet.
+
+### Native app proxy to hardware wallet
+
+Similarly to web browser, native app may ask a permission to access hardware wallet just once. Then authorization happens on hardware wallet directly while native app simply transfers data to and from the requesting app.
+
+Combination of these APIs enables a sophisticated chain of communication (web page with a hardware wallet) without any extra effort on anyone's part:
+
+    Web page <-> JS API in browser <-> native API of a wallet client app <-> custom API of a hardware wallet
+
+In this chain, web page accesses generic JS API. Web browser implements generic native extensions API (platform-dependent). Native app implements its own custom protocol to talk to its hardware wallet that implements Core Spec and authorizes transactions.
+
+
 Error Handling
 --------------
 
