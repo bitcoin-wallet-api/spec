@@ -42,9 +42,9 @@ This specification defines the following:
 
 5. **[Bitcoin iOS/OSX extensions](ios_osx_api_spec.md)** is an implementation of Core Spec with system-provided extensions API. Wallet apps may expose such extensions to allow other native apps to access them.
 
-6. **[Bitcoin Android extentions](android_api_spec.md)** defines a standard way to declare extensions for Android apps.
+6. **[Bitcoin Android extensions](android_api_spec.md)** defines a standard way to declare extensions for Android apps.
 
-7. **[Bitcoin Windows extentions](windows_api_spec.md)** defines a standard way to declare extensions for Windows 8 apps.
+7. **[Bitcoin Windows extensions](windows_api_spec.md)** defines a standard way to declare extensions for Windows 8 apps.
 
 
 App developer: what API should I use?
