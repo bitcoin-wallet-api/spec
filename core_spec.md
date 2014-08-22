@@ -34,9 +34,9 @@ Family of APIs
 
 2\. **[Bitcoin Wallet HTTP API](http_api_spec.md)** is an implementation of Core Spec for HTTP services. This is for web wallets like Coinbase and Blockchain.info.
 
-3\. **[Bitcoin URL API](url_spec.md)** is an implementation of Core Spec using *bitcoin:* URL scheme. It allows simple access to wallets for websites and native apps.
+3\. **[Bitcoin URL Protocol](url_spec.md)** is an implementation of Core Spec using *bitcoin:* URL scheme. It allows simple access to wallets for websites and native apps. Results are returned via HTTP URL callbacks.
 
-4\. **[Bitcoin Wallet JavaScript API](js_api_spec.md)** is an implementation of Core Spec with JavaScript API for web browsers. It allows web pages accessing Bitcoin wallets directly.
+4\. **[Bitcoin Wallet JavaScript API](js_api_spec.md)** is an implementation of Core Spec with JavaScript API for web browsers. It allows web pages accessing Bitcoin wallets directly from JavaScript without need to handle HTTP callbacks like when using HTTP API or bitcoin: URL.
 
 5\. **[Bitcoin Wallet iOS/OSX API](ios_osx_api_spec.md)** is an implementation of Core Spec with system-provided extensions API. Wallet apps may expose such extensions to allow other native apps to access them.
 
