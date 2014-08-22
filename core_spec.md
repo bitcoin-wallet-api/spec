@@ -27,8 +27,8 @@ Various combinations are possible:
 To allow smooth integration between apps and wallets in all these scenarios, we propose a single core specification and several platform-specific APIs.
 
 
-Protocols and APIs
-------------------
+Family of APIs
+--------------
 
 1\. **Core Specification** covers common binary data structures and secure protocol of exchanging them. It does not specify any specific programming interface for any platform or language. This protocol is the basis for all concrete APIs listed below.
 
@@ -69,8 +69,8 @@ If you develop a web browser, consider these possibilities:
 2. Allow your own in-browser extensions to connect to JS API (so instead of overriding the entire JS API they can act as proxies to it). This is for wallets that are implemented as in-browser extensions or for in-browser extensions that talk to external hardware or software wallets.
 
 
-Core Spec Protocols
--------------------
+Core Protocols
+--------------
 
 Bitcoin Wallet API is based on five protocols:
 
@@ -84,7 +84,7 @@ Bitcoin Wallet API is based on five protocols:
 
 5. **Diffie-Hellman Protocol**. Using the public key exposed in the previous API, App may ask Wallet to multiply an arbitrary public key by a private key allocated for this App.
 
-Wallet developers may implement all of these or only a subset using one of the concrete APIs on their platform.
+Wallet developers may implement all of these or only a subset within one of the concrete APIs for their platform.
 
 
 ### 1. Pay-to-Transaction Protocol
