@@ -72,22 +72,22 @@ If you are a **web browser** developer, consider these possibilities:
 4. As a variant of #3, identify web-based bitcoin wallets by <link> meta tag and proxy requests to them via HTTP API.
 
 
-Core Spec
----------
+Core Spec Protocols
+-------------------
 
 Bitcoin Wallet API is based on five protocols:
 
-1. **Pay-to-Transaction**. App sends an incomplete transaction to Wallet and asks to add a certain amount of coins in it. Wallet asks user's permission and adds signed inputs to the transaction.
+1. **Pay-to-Transaction Protocol**. App sends an incomplete transaction to Wallet and asks to add a certain amount of coins in it. Wallet asks user's permission and adds signed inputs to the transaction.
 
-2. **Inputs Authorization**. This is a two-step process. App requests from Wallet an authorization to spend certain amount of coins. Wallet asks user's permission and sends back to the app a list of unsigned inputs and change outputs. App uses them to compose a complete transaction that is sent back to Wallet for signing. Wallet signs the transaction if it correctly uses all authorized inputs and outputs.
+2. **Inputs Authorization Protocol**. This is a two-step process. App requests from Wallet an authorization to spend certain amount of coins. Wallet asks user's permission and sends back to the app a list of unsigned inputs and change outputs. App uses them to compose a complete transaction that is sent back to Wallet for signing. Wallet signs the transaction if it correctly uses all authorized inputs and outputs.
 
-3. **Public Key API**. App may outsource key storage to Wallet because it already implements security and safety measures such as encryption, authorization and backups. App can only access public keys specific to itself and request signatures of arbitrary data using these keys. Wallet never stores its own coins using these keys and only provides storage service to the app. 
+3. **Public Key Protocol**. App may outsource key storage to Wallet because it already implements security and safety measures such as encryption, authorization and backups. App can only access public keys specific to itself and request signatures of arbitrary data using these keys. Wallet never stores its own coins using these keys and only provides storage service to the app. 
 
-4. **Signature API**. Using the public key exposed in the previous API, App may request arbitrary data to be signed by the given key.
+4. **Signature Protocol**. Using the public key exposed in the previous API, App may request arbitrary data to be signed by the given key.
 
-5. **Diffie-Hellman API**. Using the public key exposed in the previous API, App may ask Wallet to multiply an arbitrary public key by a private key allocated for this App.
+5. **Diffie-Hellman Protocol**. Using the public key exposed in the previous API, App may ask Wallet to multiply an arbitrary public key by a private key allocated for this App.
 
-Wallet developers may implement all of these or only a subset using one of the concrete APIs listed above. 
+Wallet developers may implement all of these or only a subset using one of the concrete APIs on their platform.
 
 
 Pay-to-Transaction Specification
