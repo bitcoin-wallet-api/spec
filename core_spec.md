@@ -45,7 +45,7 @@ Family of APIs
 7\. **[Bitcoin Wallet Windows API](windows_api_spec.md)** defines a standard way to declare extensions for Windows 8 apps.
 
 
-#### I am developing a smart contract scheme, what API should I use?
+#### I develop a smart contract scheme, what API should I use?
 
 If you develop a **web application**, you should consider three APIs: [Bitcoin JS API](js_api_spec.md) (when available), [Bitcoin HTTP API](http_api_spec.md) and [Bitcoin URL](url_spec.md). Bitcoin JS API provides smoother experience for user, but requires coordination between their web browser and their wallet. Bitcoin HTTP API is also smooth and works similarly to OAuth: user has to authenticate transaction on a separate web page (but it works only with web-based wallets). Bitcoin URL may be used directly without special support from the browser and is used for communicating with native wallet apps. Bitcoin URL API also allows easy fallback to an intermediate wallet that can be used to fund special transactions (in case user's wallet does not support any form of Wallet API).
 
