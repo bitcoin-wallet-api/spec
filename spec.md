@@ -50,13 +50,13 @@ This specification defines several distinct protocols:
 App developer: what API should I use?
 -------------------------------------
 
-If you develop a **web application**, you should consider three APIs: Bitcoin JS API (if it's available), Bitcoin HTTP API and Bitcoin URL API. Bitcoin JS API provides smoother experience for user, but requires coordnation between their web browser and their wallet. Bitcoin HTTP API is also smooth and works similarly to OAuth: user has to authenticate transaction on a separate web page (but it works only with web-based wallets). Bitcoin URL may be used directly without special support from the browser and is used for communicating with native wallet apps. Bitcoin URL API also allows easy fallback to an intermediate wallet that can be used to fund special transactions (in case user's wallet does not support any form of Wallet API).
+If you develop a **web application**, you should consider three APIs: Bitcoin JS API (when available), Bitcoin HTTP API and Bitcoin URL API. Bitcoin JS API provides smoother experience for user, but requires coordination between their web browser and their wallet. Bitcoin HTTP API is also smooth and works similarly to OAuth: user has to authenticate transaction on a separate web page (but it works only with web-based wallets). Bitcoin URL may be used directly without special support from the browser and is used for communicating with native wallet apps. Bitcoin URL API also allows easy fallback to an intermediate wallet that can be used to fund special transactions (in case user's wallet does not support any form of Wallet API).
 
 If you develop a **native application**, e.g. for iOS, consider using native Bitcoin extension API, Bitcoin HTTP API or Bitcoin URL. Same reasoning applies as to web apps. When native extensions are not available, use Bitcoin HTTP for web wallets and URL scheme for native apps. You can use custom URL schemes in URL callbacks for inter-app communication.
 
 
 Wallet developer: what should I implement?
-------------------------
+------------------------------------------
 
 If your wallet is **web-based**, consider implementing Bitcoin HTTP API. Also consider developing a *satellite native app* to ease integration with native apps. 
 
@@ -77,7 +77,7 @@ Core Spec
 
 Bitcoin Wallet API is based on three core protocols:
 
-1. **Pay-to-Transaction**. App send an incomplete transaction to Wallet and asks to add a certain amount of coins in it. Wallet asks user's permission and adds signed inputs to the transaction.
+1. **Pay-to-Transaction**. App sends an incomplete transaction to Wallet and asks to add a certain amount of coins in it. Wallet asks user's permission and adds signed inputs to the transaction.
 
 2. **Inputs Authorization**. This is a two-step process. App requests from Wallet an authorization to spend certain amount of coins. Wallet asks user's permission and sends back to the app a list of unsigned inputs and change outputs. App uses them to compose a complete transaction that is sent back to Wallet for signing. Wallet signs the transaction if it correctly uses all authorized inputs and outputs.
 
@@ -104,9 +104,11 @@ This is extension of BIP 21 that defines *bitcoin:* URL format, optional and req
 
 1) **Pay-to-Transaction URL**
 
-    bitcoin:[address]?tx=<base58check encoding of a transaction>&amount=<btc>[&message=...]
+    bitcoin:[address]?tx=<base58check encoding of a transaction>&amount=<btc>[&req-anyonecanpay=1][&message=...]
     
 Wallet asks user's permission to spend certain amount in that transaction. Then it adds necessary inputs and outputs, signs transaction and broadcasts it.
+
+If *req-anyonecanpay* is equal to 1, then all inputs must be signed with hashtype flag *ALL | ANYONECANPAY*. Otherwise the hashtype is *ALL*.
 
 Note: if the app supports funding via its own temporary wallet, it may also provide payment address before "?" which will be used by wallets not supporting the API.
 
@@ -125,9 +127,11 @@ App may also provide a bitcoin address as a fallback for wallets that do not sup
 
 Step 2: sign a transaction.
 
-    bitcoin:?tx=<base58check encoding of a transaction>&req-token=<base58check encoding of an authorization token>[&req-return=<url where to post the signed transaction>]
+    bitcoin:?tx=<base58check encoding of a transaction>&req-token=<base58check encoding of an authorization token>[&req-anyonecanpay=1][&req-return=<url where to post the signed transaction>]
 
 Wallet checks if the token is valid and all its inputs and outputs are present in a given transaction. If correct, it inserts the signatures and broadcasts the transaction.
+
+If *req-anyonecanpay* is equal to 1, then all inputs must be signed with hashtype flag *ALL | ANYONECANPAY*. Otherwise the hashtype is *ALL*.
 
 If *req-return* is present, instead of broadcasting, wallet calls the given URL with the base64url-encoded signatures for the transaction.
 
