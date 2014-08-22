@@ -90,16 +90,14 @@ Bitcoin Wallet API is based on five protocols:
 Wallet developers may implement all of these or only a subset using one of the concrete APIs on their platform.
 
 
-Pay-to-Transaction Specification
---------------------------------
+### 1. Pay-to-Transaction Protocol
 
 One request: app sends an incomplete transaction and asks wallet to add inputs and outputs and sign inputs. Wallet returns inputs, outputs and signatures.
 
 Signatures may be done with ANYONECANPAY flag.
 
 
-Inputs Authorization Specification
-----------------------------------
+### 2. Inputs Authorization Protocol
 
 Two requests: 
 
@@ -115,22 +113,19 @@ TODO: think about explicit revocation of authorization so app may retry.
 TODO: require certain number of confirmations on an output from wallet. Rationale: while technically, app can check confirmations of the inputs itself, it will do that *after* getting user's permission to spend funds. If it wants to retry, it would be very confusing for the user to authorize again the same payment. Also, retrying is not a guarantee to receive confirmed unspent outputs again. To simplify things, wallet takes care of it if it can. If app does not care, it specifies number of confirmations equal to 0.
 
 
-Public Key Specification
-------------------------
+### 3. Public Key Protocol
 
 Public key is linked to identity of the requestor. Different APIs do it differently. 
 
 Public key is indexed by BIP32 non-hardened derivation index. This is to simplify key management for the wallets so they do not need to store any app-specific data at all.
 
 
-Signature Specification
------------------------
+### 4. Signature Protocol
 
 Standard ECDSA signature. Maybe require it to be deterministic according to RFC6979?
 
 
-Diffie-Hellman Specification
-----------------------------
+### 5. Diffie-Hellman Protocol
 
 Wallet should check if the public key is correct and sign.
 
