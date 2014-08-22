@@ -106,6 +106,12 @@ Two requests:
 
 App is free to supply incomplete transaction and ask wallet to sign with ANYONECANPAY flag.
 
+TODO: specify the timeout for authorization.
+
+TODO: think about explicit revocation of authorization so app may retry.
+
+TODO: require certain number of confirmations on an output from wallet. Rationale: while technically, app can check confirmations of the inputs itself, it will do that *after* getting user's permission to spend funds. If it wants to retry, it would be very confusing for the user to authorize again the same payment. Also, retrying is not a guarantee to receive confirmed unspent outputs again. To simplify things, wallet takes care of it if it can. If app does not care, it specifies number of confirmations equal to 0.
+
 
 Public Key Specification
 ------------------------
@@ -124,10 +130,23 @@ Standard ECDSA signature. Maybe require it to be deterministic according to RFC6
 Diffie-Hellman Specification
 ----------------------------
 
-Public key is indexed by BIP32 non-hardened derivation index.
+Wallet should check if the public key is correct and sign.
 
 
+Error Handling
+--------------
 
+Error handling highly depends on actual implementation of this spec. But the general rule is: *Wallet should never leak private information* by offering a variety of error messages. In case of any error, App should receive a generic "failure" response while Wallet is free to tell the user actual reasons for error. 
+
+Kinds of errors:
+
+1. Wallet is not available. App receives "not available" error. App may provide user with alternative options to provide Bitcoins. Example: if [JS API](js_api_spec.md) cannot connect to any wallet, App may provide a [bitcoin: URL](url_spec.md) so user can go directly to his wallet app.
+
+2. Not enough funds. Wallet may explain to user that App asks for more funds than user has. App sees generic "failure" error.
+
+3. Authorization failed. Wallet may explain to user that his password is incorrect, fingerprint did not match, daily spending limit reached etc. App sees generic "failure" error.
+
+4. No confirmed outputs available yet. Wallet may tell the user that his coins are not "mature" enough. App sees generic "failure" error.
 
 
 

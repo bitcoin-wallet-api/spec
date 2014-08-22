@@ -7,11 +7,13 @@ This specification extends BIP 21 that defines *bitcoin:* URL format with implem
 Pay-to-Transaction URL
 ----------------------
 
-    bitcoin:[address]?tx=<base58check encoding of a transaction>&amount=<btc>[&req-anyonecanpay=1][&message=...]
+    bitcoin:[address]?tx=<base58check encoding of a transaction>&amount=<btc>[&req-confs=N][&req-anyonecanpay=1][&message=...]
     
 Wallet asks user's permission to spend certain amount in that transaction. Then it adds necessary inputs and outputs, signs transaction and broadcasts it.
 
 If *req-anyonecanpay* is equal to 1, then all inputs must be signed with hashtype flag *ALL | ANYONECANPAY*. Otherwise the hashtype is *ALL*.
+
+If *req-confs* is specified, every unspent outputs must have that many confirmations. Default is 0. If wallet does not have mature enough outputs, it should return generic failure.
 
 Note: if the app supports funding via its own temporary wallet, it may also provide payment address before "?" which will be used by wallets not supporting the API.
 
@@ -31,11 +33,13 @@ App may also provide a bitcoin address as a fallback for wallets that do not sup
 
 Step 2: sign a transaction.
 
-    bitcoin:?tx=<base58check encoding of a transaction>&req-token=<base58check encoding of an authorization token>[&req-anyonecanpay=1][&req-return=<url where to post the signed transaction>]
+    bitcoin:?tx=<base58check encoding of a transaction>&req-token=<base58check encoding of an authorization token>[&req-confs=N][&req-anyonecanpay=1][&req-return=<url where to post the signed transaction>]
 
 Wallet checks if the token is valid and all its inputs and outputs are present in a given transaction. If correct, it inserts the signatures and broadcasts the transaction.
 
 If *req-anyonecanpay* is equal to 1, then all inputs must be signed with hashtype flag *ALL | ANYONECANPAY*. Otherwise the hashtype is *ALL*.
+
+If *req-confs* is specified, every unspent outputs must have that many confirmations. Default is 0. If wallet does not have mature enough outputs, it should return generic failure.
 
 If *req-return* is present, instead of broadcasting, wallet calls the given URL with the base64url-encoded signatures for the transaction.
 
