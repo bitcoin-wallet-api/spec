@@ -110,7 +110,24 @@ App is free to supply incomplete transaction and ask wallet to sign with ANYONEC
 
 Signatures may be done with hashtype ALL, SINGLE and ANYONECANPAY flags. Hashtype NONE is not supported until we find a good use case for them and figure how to deal with change outputs.
 
-TODO: specify the timeout for authorization.
+TODO: specify the timeout for authorization. We need the wallet to "lock" inputs until they are actually signed. We have several options:
+
+1) Lock forever. So even if they are not signed, they are considered "spent" right away. App is supposed to spend or refund them. Problem: sometimes app may want to simply cancel/abort the protocol.
+
+2) Lock for a very long time (e.g. 1 year). So coins are effectively "locked" but can be used later. This is UX nightmare.
+
+3) Lock for a time that wallet decides. App should spend inputs within a given reasonable timeframe or coins can be spent by the user. The problem is to explain to the user in simple terms that in case of cancellation, funds will become available only after X minutes/days.
+
+4) Lock for a time that app decides (with wallet's cap). App may request inputs for shorter amount than default as a courtesy to the user. E.g. for a minute instead of one hour.
+
+5) Lock for a time with explicit cancellation. App may try to tell the wallet to cancel the lock before timeout. The problem is how to communicate the cancellation. In some contexts (e.g. bitcoin: URL) it may be too explicit.
+
+Other questions: is it desireable to allow very long timeouts, e.g. days? Maybe some contracts really require that.
+
+6) Best-effort locking. Wallet does not promise anything to the app regarding locking inputs, but tries not to use them if possible. This requires no cancellation. If app requires temporary storage for funds (e.g. for long-term crowdfunding transaction), it should move the funds right away (e.g. to 2-of-2 multisig with user's key). This is in some sense a variation of option 3/4.
+
+
+
 
 TODO: think about explicit revocation of authorization so app may retry.
 
